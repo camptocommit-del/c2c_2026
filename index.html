@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Draft lottery</title>
+<title>Coast2Coast FFL &mdash; 2026 Draft Lottery</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -21,6 +21,8 @@
   --board-rule:#2C3F58;
   --field:#F7F9FC;
   --ok:#2E6B4F;
+  --west:#1D7A8C;
+  --east:#A8813C;
 }
 :root:not([data-theme="light"]){
   @media (prefers-color-scheme: dark){}
@@ -39,6 +41,8 @@
     --board-rule:#26374B;
     --field:#111A25;
     --ok:#66B48F;
+    --west:#4FB3C6;
+    --east:#D3A95F;
   }
 }
 :root[data-theme="dark"]{
@@ -54,6 +58,8 @@
   --board-rule:#26374B;
   --field:#111A25;
   --ok:#66B48F;
+  --west:#4FB3C6;
+  --east:#D3A95F;
 }
 
 *{box-sizing:border-box}
@@ -66,9 +72,16 @@ body{
   line-height:1.55;
   -webkit-font-smoothing:antialiased;
 }
-.wrap{max-width:960px;margin:0 auto;padding:40px 20px 80px}
+body::before{content:"";display:block;height:3px;background:linear-gradient(90deg,var(--west),var(--east))}
+.wrap{max-width:960px;margin:0 auto;padding:36px 20px 80px}
 
 .masthead{margin-bottom:30px}
+.wordmark{display:flex;align-items:center;gap:12px;margin:0 0 14px}
+.wordmark .mark{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:12.5px;letter-spacing:.18em;color:var(--soft);white-space:nowrap}
+.wordmark .line{flex:1;height:1px;background:linear-gradient(90deg,var(--west),var(--east));min-width:30px}
+.wordmark .dot{width:7px;height:7px;border-radius:50%;flex:none}
+.wordmark .dot.w{background:var(--west)}
+.wordmark .dot.e{background:var(--east)}
 .masthead h1{
   font-family:"Instrument Serif",Georgia,"Times New Roman",serif;
   font-weight:400;
@@ -97,7 +110,8 @@ body{
 }
 .board-head{
   display:flex;justify-content:space-between;align-items:baseline;gap:12px;
-  border-bottom:1px solid var(--board-rule);
+  border-bottom:1px solid transparent;
+  border-image:linear-gradient(90deg,var(--west),var(--east)) 1;
   padding-bottom:12px;margin-bottom:16px;
   font-size:13.5px;color:#93A6BE;
 }
@@ -136,6 +150,35 @@ body{
 .commish[open]>summary::before{transform:rotate(90deg)}
 .commish>summary:focus-visible{outline:2px solid var(--seal);outline-offset:3px}
 .commish[open]>summary{margin-bottom:20px}
+
+.tabs{display:flex;gap:26px;border-bottom:1px solid var(--rule);margin:24px 0 0}
+.tab{background:none;border:0;border-radius:0;padding:10px 0;margin-bottom:-1px;font-size:15px;font-weight:400;color:var(--soft);cursor:pointer;border-bottom:2px solid transparent}
+.tab:hover{color:var(--ink);opacity:1}
+.tab.active{color:var(--ink);font-weight:500;border-bottom-color:var(--west)}
+
+.rules h2{font-family:"Instrument Serif",Georgia,serif;font-weight:400;font-size:29px;line-height:1.15;margin:30px 0 8px;border-top:2px solid var(--ink);padding-top:14px}
+.rules>p.lede{margin:0 0 22px;color:var(--soft);max-width:64ch}
+.change{border-left:3px solid var(--gold);padding:2px 0 2px 16px;margin:0 0 26px}
+.change h3{font-family:"Instrument Serif",Georgia,serif;font-weight:400;font-size:23px;line-height:1.25;margin:0 0 4px}
+.change .delta{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:12.5px;color:var(--seal);margin:0 0 8px}
+.change p:last-child{margin:0;max-width:64ch}
+.champ{background:var(--board);color:var(--board-ink);border-radius:4px;padding:20px 22px;margin:0 0 28px}
+.champ .kicker{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:12px;letter-spacing:.16em;color:var(--east);margin:0 0 6px}
+.champ .who{font-family:"Instrument Serif",Georgia,serif;font-size:38px;line-height:1.1;margin:0 0 8px}
+.champ p{margin:0;color:#A9BAD0;max-width:60ch;font-size:15px}
+.round{margin:0 0 20px}
+.round h4{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:12px;letter-spacing:.12em;color:var(--soft);font-weight:400;margin:0 0 8px}
+.game{display:flex;align-items:baseline;gap:10px;padding:7px 0;border-bottom:1px solid var(--rule);font-size:15px}
+.game:last-child{border-bottom:0}
+.game .win{font-weight:600}
+.game .lose{color:var(--soft)}
+.game .vs{color:var(--soft);font-size:13px}
+.game .tag{margin-left:auto;font-size:12.5px;color:var(--soft)}
+table.cmp{width:100%;border-collapse:collapse;font-size:15px;margin-top:6px}
+table.cmp th{text-align:left;font-weight:500;font-size:13px;color:var(--soft);border-bottom:1px solid var(--rule);padding:0 12px 7px 0}
+table.cmp td{padding:9px 12px 9px 0;border-bottom:1px solid var(--rule);vertical-align:top}
+table.cmp td:first-child{color:var(--soft);width:38%}
+table.cmp tr:last-child td{border-bottom:0}
 
 .step{
   display:grid;grid-template-columns:34px minmax(0,1fr);gap:0 18px;
@@ -207,9 +250,23 @@ footer{border-top:1px solid var(--rule);padding-top:18px;margin-top:10px;color:v
 <div class="wrap">
 
   <header class="masthead">
-    <h1>Draft lottery</h1>
+    <div class="wordmark">
+      <span class="dot w"></span>
+      <span class="mark">COAST 2 COAST FFL</span>
+      <span class="line"></span>
+      <span class="dot e"></span>
+    </div>
+    <h1>2026 Draft Lottery</h1>
     <p>A draft order nobody can steer, and that you can build yourself in about ten seconds.</p>
   </header>
+
+  <nav class="tabs">
+    <button class="tab active" data-tab="lottery">Draft lottery</button>
+    <button class="tab" data-tab="rules">2026 rule changes</button>
+    <button class="tab" data-tab="history">2025 season</button>
+  </nav>
+
+  <div id="tab-lottery">
 
   <section class="primer">
     <h2>How this works</h2>
@@ -302,6 +359,107 @@ WatchCity</textarea>
   </section>
 
   </details>
+
+  </div>
+
+  <div id="tab-rules" class="hidden">
+  <section class="rules">
+    <h2>Coming off 2025</h2>
+    <p class="lede">Scott won it from the six seed, knocking out the 3, the 2 and the 1 on his way through &mdash; the two bye teams went 1&ndash;3 combined. Full bracket and standings are on the 2025 tab.</p>
+    <p style="max-width:64ch;margin:0 0 8px">Underneath that, the standings and the scoreboard spent the year disagreeing. Ben earned a first-round bye at 10&ndash;4 while sitting eighth in scoring. Curtis made the field at 8&ndash;6 with the eleventh-most points. Eric put up the third-most points in the league and drew the five seed, and Steve outscored two playoff teams on the way to 5&ndash;9.</p>
+    <p style="max-width:64ch;color:var(--soft)">Which is the short version of why the first change below exists.</p>
+
+    <h2>What changed for 2026</h2>
+    <p class="lede">Scoring is untouched. Every value carried over from last season &mdash; passing, rushing, receiving, kicking and the defense tiers are all identical. The changes are structural.</p>
+
+    <div class="change">
+      <h3>You play the league median every week</h3>
+      <p class="delta">2025: off &rarr; 2026: on</p>
+      <p>On top of your head-to-head matchup, your score gets compared to the middle score in the league that week. So each week produces two results and you can go 2&ndash;0, 1&ndash;1 or 0&ndash;2. Put up the third-highest score and run into the second-highest, and you still bank a win instead of eating a loss. Over fourteen weeks it takes a lot of the schedule luck out of who makes the six.</p>
+    </div>
+
+    <div class="change">
+      <h3>Two more bench spots</h3>
+      <p class="delta">5 bench &rarr; 7 bench</p>
+      <p>Rosters go from 15 to 17. Starting lineups don't change at all. With twelve teams that's 24 more players held league-wide, so the waiver wire will run thinner than you're used to &mdash; handcuffs and stashes get more expensive to chase.</p>
+    </div>
+
+    <div class="change">
+      <h3>Two IR slots</h3>
+      <p class="delta">none &rarr; 2</p>
+      <p>You can park two injured players without burning bench spots. Only players ruled Out or Suspended qualify &mdash; Doubtful and Questionable don't, so you can't hide a healthy scratch there.</p>
+    </div>
+
+    <div class="change">
+      <h3>Bench players lock at kickoff</h3>
+      <p class="delta">2025: off &rarr; 2026: on</p>
+      <p>A bench player is frozen once his game starts, same as a starter. No more sliding someone into your lineup after you've already seen him play.</p>
+    </div>
+
+    <h2>What stayed the same</h2>
+    <table class="cmp">
+      <tr><th>Setting</th><th>2025</th><th>2026</th></tr>
+      <tr><td>Scoring</td><td>PPR, 4-point passing TD</td><td>Identical</td></tr>
+      <tr><td>Starting lineup</td><td>QB, RB, RB, WR, WR, TE, FLEX, FLEX, K, DEF</td><td>Identical</td></tr>
+      <tr><td>Teams</td><td>12</td><td>12</td></tr>
+      <tr><td>Keepers</td><td>1 max</td><td>1 max</td></tr>
+      <tr><td>Waivers</td><td>Rolling, clear Wednesday, 2 days after a drop</td><td>Identical</td></tr>
+      <tr><td>Trade review</td><td>2 days</td><td>2 days</td></tr>
+      <tr><td>Trade deadline</td><td>Week 11</td><td>Week 11</td></tr>
+      <tr><td>Playoffs</td><td>Start Week 15, 6 teams, one week per round</td><td>Identical</td></tr>
+    </table>
+  </section>
+  </div>
+
+  <div id="tab-history" class="hidden">
+  <section class="rules">
+    <div class="champ">
+      <p class="kicker">2025 CHAMPION</p>
+      <p class="who">Scott</p>
+      <p>In from the six seed at 7&ndash;7, after taking more points against than anybody else in the league &mdash; then knocked off the two seed and the one seed back to back.</p>
+    </div>
+
+    <h2>How the bracket went</h2>
+    <p class="lede">Six teams, byes for the top two, one week per round.</p>
+
+    <div class="round">
+      <h4>ROUND 1</h4>
+      <div class="game"><span class="win">Eric</span> <span class="vs">over</span> <span class="lose">Curtis</span><span class="tag">5 seed over 4</span></div>
+      <div class="game"><span class="win">Scott</span> <span class="vs">over</span> <span class="lose">Ben</span><span class="tag">6 seed over 3</span></div>
+    </div>
+
+    <div class="round">
+      <h4>SEMIFINALS</h4>
+      <div class="game"><span class="win">Mitch</span> <span class="vs">over</span> <span class="lose">Eric</span><span class="tag">1 seed holds</span></div>
+      <div class="game"><span class="win">Scott</span> <span class="vs">over</span> <span class="lose">Stacy</span><span class="tag">6 seed over 2</span></div>
+    </div>
+
+    <div class="round">
+      <h4>CHAMPIONSHIP</h4>
+      <div class="game"><span class="win">Scott</span> <span class="vs">over</span> <span class="lose">Mitch</span><span class="tag">the title</span></div>
+      <div class="game"><span class="win">Stacy</span> <span class="vs">over</span> <span class="lose">Eric</span><span class="tag">third place</span></div>
+      <div class="game"><span class="win">Curtis</span> <span class="vs">over</span> <span class="lose">Ben</span><span class="tag">fifth place</span></div>
+    </div>
+
+    <h2>Final standings</h2>
+    <p class="lede">Regular season finish, with the six playoff teams up top.</p>
+    <table class="cmp">
+      <tr><th>Seed</th><th>Manager</th><th>Record</th><th>Points for</th><th>Points against</th></tr>
+      <tr><td>1</td><td>Mitch</td><td>10-4</td><td>1940.34</td><td>1689.64</td></tr>
+      <tr><td>2</td><td>Stacy</td><td>10-4</td><td>1846.96</td><td>1585.28</td></tr>
+      <tr><td>3</td><td>Ben</td><td>10-4</td><td>1699.54</td><td>1707.20</td></tr>
+      <tr><td>4</td><td>Curtis</td><td>8-6</td><td>1613.20</td><td>1637.32</td></tr>
+      <tr><td>5</td><td>Eric</td><td>7-7</td><td>1856.94</td><td>1765.64</td></tr>
+      <tr><td>6</td><td>Scott</td><td>7-7</td><td>1827.88</td><td>1864.78</td></tr>
+      <tr><td>7</td><td>Robbie</td><td>7-7</td><td>1785.20</td><td>1765.00</td></tr>
+      <tr><td>8</td><td>Dave</td><td>6-8</td><td>1708.48</td><td>1702.12</td></tr>
+      <tr><td>9</td><td>Rick</td><td>6-8</td><td>1692.12</td><td>1829.80</td></tr>
+      <tr><td>10</td><td>Steve</td><td>5-9</td><td>1712.24</td><td>1763.56</td></tr>
+      <tr><td>11</td><td>Gabby</td><td>4-10</td><td>1642.16</td><td>1755.46</td></tr>
+      <tr><td>12</td><td>Bull</td><td>4-10</td><td>1536.60</td><td>1795.86</td></tr>
+    </table>
+  </section>
+  </div>
 
   <footer>
     The shuffle is a Fisher&ndash;Yates pass driven by a SHA-256 counter stream, with rejection sampling so every one of the 12 slots is equally likely. Nothing is stored or sent anywhere; the page does the arithmetic in your browser.
@@ -478,6 +636,14 @@ $('unlockBtn').addEventListener('click', unlockRoster);
 $('drawBtn').addEventListener('click', () => runDraw(true));
 $('copyCommit').addEventListener('click', e => copyText(commitNotice(), e.target, 'Copied'));
 $('copyRecord').addEventListener('click', e => copyText(recordText(), e.target, 'Copied'));
+
+document.querySelectorAll('.tab').forEach(t => {
+  t.addEventListener('click', () => {
+    document.querySelectorAll('.tab').forEach(x => x.classList.toggle('active', x === t));
+    ['lottery','rules','history'].forEach(n => show($('tab-'+n), t.dataset.tab === n));
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+});
 
 renderSlots(null);
 lockRoster();
