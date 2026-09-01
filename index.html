@@ -123,6 +123,20 @@ body{
 @media (prefers-reduced-motion:reduce){.slot.pop{animation:none}}
 
 /* steps */
+.verify{border-top:2px solid var(--ink);padding-top:16px;margin-bottom:36px}
+.verify .seedfield{max-width:260px;margin-bottom:6px}
+.inline-hash{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:12.5px;word-break:break-all;color:var(--ink)}
+.verify h2{font-family:"Instrument Serif",Georgia,serif;font-weight:400;font-size:27px;line-height:1.2;margin:0 0 6px}
+.verify .lede{margin:0 0 16px;color:var(--soft);max-width:62ch}
+
+.commish{border-top:1px solid var(--rule);padding-top:14px;margin-bottom:30px}
+.commish>summary{cursor:pointer;font-size:14.5px;color:var(--soft);list-style:none;padding:4px 0}
+.commish>summary::-webkit-details-marker{display:none}
+.commish>summary::before{content:"\25B8";color:var(--seal);display:inline-block;margin-right:8px;transition:transform .15s}
+.commish[open]>summary::before{transform:rotate(90deg)}
+.commish>summary:focus-visible{outline:2px solid var(--seal);outline-offset:3px}
+.commish[open]>summary{margin-bottom:20px}
+
 .step{
   display:grid;grid-template-columns:34px minmax(0,1fr);gap:0 18px;
   padding-bottom:34px;
@@ -194,15 +208,14 @@ footer{border-top:1px solid var(--rule);padding-top:18px;margin-top:10px;color:v
 
   <header class="masthead">
     <h1>Draft lottery</h1>
-    <p>A draft order the commissioner can't steer, and that you can check yourself in about a minute.</p>
+    <p>A draft order nobody can steer, and that you can build yourself in about ten seconds.</p>
   </header>
 
   <section class="primer">
-    <h2>Why this can't be rigged</h2>
-    <p><b>The names get locked before anything random happens.</b> Locking the list turns it into a long code — a fingerprint of those exact 12 names. Change one letter afterward and the fingerprint comes out completely different. So the roster you were shown is the roster that got used.</p>
-    <p><b>The randomness comes from outside the league.</b> Ahead of the draw, the commissioner names a number that doesn't exist yet and that none of us can nudge: where the S&amp;P 500 closes on a stated day. He can't pick a friendly one, because nobody knows it yet. He can't quietly try again, because he already told you which day counts.</p>
-    <p><b>The math gives everyone the same answer.</b> The fingerprint and that closing number get scrambled together into an order. There's no dice roll and no button that shakes out something different on the second press — put the same two things in and this page produces the same 12 names in the same order, on anyone's phone.</p>
-    <p class="aside">So here's your check: take the result he posts, paste it into the box at the bottom of this page, and your own browser rebuilds the board from scratch. Match means it's real. If a name was swapped or the number was fudged, it won't match, and the page will say so.</p>
+    <h2>How this works</h2>
+    <p><b>The teams are locked into this page.</b> That list of twelve has a fingerprint &mdash; the long code down in the next paragraph. Change even one letter of one team name and that code comes out completely different, so the code posted in the league chat is proof the roster hasn't been touched since.</p>
+    <p><b>Nobody rolls the dice.</b> The order gets built from a number nobody in the league controls: where the S&amp;P 500 closes on Tuesday, September 1. Feed a number into this page and it works like a random number generator &mdash; out comes a scrambled order that looks random but lands exactly the same way every time for that same number.</p>
+    <p><b>Try it right now.</b> Type any number you feel like into the box below and press the button. You'll get a random-looking board. Type that same number again and you'll get that same board back. Change one digit and the whole thing reshuffles. That's the whole trick. Nobody can aim it, because Tuesday's close doesn't exist yet. And nobody can fake it, because once it does exist you can type it in here yourself and see what comes out.</p>
   </section>
 
   <section class="board" aria-label="Draft board">
@@ -213,11 +226,26 @@ footer{border-top:1px solid var(--rule);padding-top:18px;margin-top:10px;color:v
     <div class="slots" id="slots"></div>
   </section>
 
+  <section class="verify">
+    <h2>Build the board yourself</h2>
+    <p class="lede">Twelve teams, locked into this page, fingerprint <span class="inline-hash" id="commitInline"></span>. The real draw uses the S&amp;P 500's closing level on <b>Tuesday, September 1 2026</b> &mdash; until then, put in any number you like.</p>
+    <div class="field seedfield">
+      <label for="seedVal">Closing level</label>
+      <input type="text" id="seedVal" spellcheck="false" placeholder="6412.83">
+    </div>
+    <p class="note">Plain digits, two decimals, no comma &mdash; <code>6412.83</code>, not <code>6,412.83</code>. Everyone has to type the same characters.</p>
+    <div class="row"><button id="drawBtn">Show the draft order</button></div>
+    <p class="err hidden" id="drawErr"></p>
+  </section>
+
+  <details class="commish">
+    <summary>Commissioner controls</summary>
+
   <section class="step">
     <div class="marker">1</div>
     <div>
-      <h2>Lock the roster</h2>
-      <p class="lede">One manager per line. Locking produces a fingerprint of the list — post it to the league chat now, before the seed exists. Any later edit to the names produces a different fingerprint, so nobody can quietly swap a name in after the fact.</p>
+      <h2>The locked roster</h2>
+      <p class="lede">One manager per line. Locking produces the fingerprint above &mdash; post it to the league chat before Tuesday&rsquo;s close. Any later edit produces a different fingerprint, so nobody can quietly swap a name in after the fact.</p>
       <div class="field">
         <label for="roster">Managers</label>
         <textarea id="roster" spellcheck="false" placeholder="One name per line">BostonBeagle
@@ -249,32 +277,23 @@ WatchCity</textarea>
   <section class="step">
     <div class="marker">2</div>
     <div>
-      <h2>Name the seed before it happens</h2>
-      <p class="lede">Announce a public number that does not exist yet and that none of you can influence. Pin down the exact format at the same time — every manager has to type the same characters or the shuffle lands somewhere else.</p>
-      <div class="pair">
-        <div class="field">
-          <label for="seedSrc">Source, announced in advance</label>
-          <input type="text" id="seedSrc" spellcheck="false" value="S&amp;P 500 close, Tuesday September 1 2026">
-        </div>
-        <div class="field">
-          <label for="seedVal">Value, filled in after</label>
-          <input type="text" id="seedVal" spellcheck="false" placeholder="6412.83">
-        </div>
+      <h2>The announced source</h2>
+      <p class="lede">Whatever public number you named in advance. It feeds the shuffle along with the roster fingerprint, so it has to read the same here as it did in your announcement.</p>
+      <div class="field">
+        <label for="seedSrc">Source</label>
+        <input type="text" id="seedSrc" spellcheck="false" value="S&amp;P 500 close, Tuesday September 1 2026">
       </div>
-      <p class="note">Write the closing level as plain digits with two decimals and no comma — <code>6412.83</code>, not <code>6,412.83</code>. Capitalization and extra spaces are ignored; a stray comma is not.</p>
     </div>
   </section>
 
   <section class="step">
     <div class="marker">3</div>
     <div>
-      <h2>Run the draw</h2>
-      <p class="lede">The fingerprint and the seed are hashed together into a shuffle. Same roster plus same seed always yields the same board, on any device, for anyone who opens this page.</p>
+      <h2>The record to post</h2>
+      <p class="lede">Run the draw above, then copy this and put it in the league chat. It's the roster, the number, and the resulting order in one block.</p>
       <div class="row">
-        <button id="drawBtn">Run the draw</button>
         <button class="ghost hidden" id="copyRecord">Copy the full record</button>
       </div>
-      <p class="err hidden" id="drawErr"></p>
       <div class="receipt hidden" id="recordBox">
         <h3>Result record</h3>
         <pre class="record" id="recordText"></pre>
@@ -282,23 +301,10 @@ WatchCity</textarea>
     </div>
   </section>
 
-  <section class="step">
-    <div class="marker">4</div>
-    <div>
-      <h2>Check somebody else's record</h2>
-      <p class="lede">Paste a record posted by the commissioner. This fills the fields, redoes the math, and tells you whether the board matches.</p>
-      <div class="field">
-        <label for="verifyIn">Pasted record</label>
-        <textarea id="verifyIn" spellcheck="false" style="min-height:130px" placeholder="Paste the whole record here"></textarea>
-      </div>
-      <div class="row"><button class="ghost" id="verifyBtn">Check it</button></div>
-      <p class="err hidden" id="verifyErr"></p>
-      <p class="ok hidden" id="verifyOk"></p>
-    </div>
-  </section>
+  </details>
 
   <footer>
-    The shuffle is a Fisher–Yates pass driven by a SHA-256 counter stream, with rejection sampling so every one of the 12 slots is equally likely. Nothing is stored or sent anywhere; the page does the arithmetic in your browser.
+    The shuffle is a Fisher&ndash;Yates pass driven by a SHA-256 counter stream, with rejection sampling so every one of the 12 slots is equally likely. Nothing is stored or sent anywhere; the page does the arithmetic in your browser.
   </footer>
 </div>
 
@@ -379,6 +385,7 @@ async function lockRoster(){
   state.order = null;
   $('roster').readOnly = true;
   $('lockBtn').disabled = true;
+  $('commitInline').textContent = state.commit;
   $('commitHash').innerHTML = state.commit + '<br><span class="dim">' + state.names.length + ' managers, sorted alphabetically</span>';
   show($('commitBox'), true);
   show($('recordBox'), false);
@@ -397,6 +404,7 @@ function unlockRoster(){
   show($('copyRecord'), false);
   $('boardTitle').textContent = 'Waiting on the draw';
   $('boardTag').textContent = 'unofficial';
+  $('commitInline').textContent = '\u2014';
   renderSlots(null);
 }
 
@@ -464,56 +472,15 @@ async function copyText(text, btn, done){
   setTimeout(()=>{ btn.textContent = label; }, 2000);
 }
 
-function parseRecord(text){
-  const out = { names: [], order: [], src: '', val: '', commit: '' };
-  let mode = null;
-  for(const raw of text.split('\n')){
-    const line = raw.trim();
-    if(/^roster fingerprint:/i.test(line)){ out.commit = line.split(':')[1].trim(); mode = null; continue; }
-    if(/^seed source:/i.test(line)){ out.src = line.slice(line.indexOf(':')+1).trim(); mode = null; continue; }
-    if(/^seed value:/i.test(line)){ out.val = line.slice(line.indexOf(':')+1).trim(); mode = null; continue; }
-    if(/^preimage:/i.test(line)){ mode = null; continue; }
-    if(/^roster:?$/i.test(line)){ mode = 'roster'; continue; }
-    if(/^draft order:?$/i.test(line)){ mode = 'order'; continue; }
-    if(!line) continue;
-    if(mode === 'roster') out.names.push(normName(line));
-    else if(mode === 'order') out.order.push(normName(line.replace(/^\d+[.)]\s*/,'')));
-  }
-  return out;
-}
-
-async function verify(){
-  msg($('verifyErr'), ''); msg($('verifyOk'), '');
-  const rec = parseRecord($('verifyIn').value);
-  if(rec.names.length < 2 || rec.order.length < 2){
-    msg($('verifyErr'), 'That record is missing its roster or its draft order. Paste the whole thing, including both lists.');
-    return;
-  }
-  $('roster').value = rec.names.join('\n');
-  $('seedSrc').value = rec.src === '(none given)' ? '' : rec.src;
-  $('seedVal').value = rec.val;
-  unlockRoster();
-  $('roster').value = rec.names.join('\n');
-  await lockRoster();
-  if(rec.commit && rec.commit !== state.commit){
-    msg($('verifyErr'), 'The roster in that record does not match its own fingerprint. The names were changed after the lock.');
-    return;
-  }
-  const order = await runDraw(true);
-  if(!order) return;
-  const same = order.length === rec.order.length && order.every((n,i) => n === rec.order[i]);
-  if(same) msg($('verifyOk'), 'Checks out. That seed and that roster produce exactly this order.');
-  else msg($('verifyErr'), 'No match. The order in that record is not what this roster and seed produce — the board above is the real one.');
-}
 
 $('lockBtn').addEventListener('click', lockRoster);
 $('unlockBtn').addEventListener('click', unlockRoster);
 $('drawBtn').addEventListener('click', () => runDraw(true));
 $('copyCommit').addEventListener('click', e => copyText(commitNotice(), e.target, 'Copied'));
 $('copyRecord').addEventListener('click', e => copyText(recordText(), e.target, 'Copied'));
-$('verifyBtn').addEventListener('click', verify);
 
 renderSlots(null);
+lockRoster();
 </script>
 </body>
 </html>
